@@ -516,3 +516,46 @@ void Sintatico::actual_value() throw (AnalysisError) {
 	expression();
 }
 //END - Statements
+
+// Variable and Identifier Categories
+void Sintatico::identifier() throw (AnalysisError) {
+	match(IDENTIFIER_);
+}
+void Sintatico::referenced_variable() throw (AnalysisError) {
+	pointer-variable();
+	match(UPARROW_);
+}
+void Sintatico::record_variable() throw (AnalysisError) {
+	variable();
+}
+void Sintatico::pointer_variable() throw (AnalysisError) {
+	variable();
+}
+void Sintatico::actual_variable() throw (AnalysisError) {
+	variable();
+}
+void Sintatico::array_variable() throw (AnalysisError) {
+	variable();
+}
+void Sintatico::field_identifier() throw (AnalysisError) {
+	identifier();
+}
+void Sintatico::constant_identifier() throw (AnalysisError) {
+	identifier();
+}
+void Sintatico::variable_identifier() throw (AnalysisError) {
+	identifier();
+}
+void Sintatico::type_identifier() throw (AnalysisError) {
+	identifier();
+}
+void Sintatico::procedure_identifier() throw (AnalysisError) {
+	identifier();
+}
+void Sintatico::function_identifier() throw (AnalysisError) {
+	identifier();
+}
+void Sintatico::bound_identifier() throw (AnalysisError) {
+	identifier();
+}
+//END - Variable and Identifier Categories
