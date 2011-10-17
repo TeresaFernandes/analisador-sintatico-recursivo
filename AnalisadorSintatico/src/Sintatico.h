@@ -75,6 +75,21 @@ private:
 	void actual_parameter() throw (AnalysisError);
 	void actual_value() throw (AnalysisError);
 	//END - Statements
+
+	// Variable and Identifier Categories
+	void Sintatico::identifier() throw (AnalysisError);
+	void Sintatico::referenced_variable() throw (AnalysisError);
+	void Sintatico::record_variable() throw (AnalysisError);
+	void Sintatico::pointer_variable() throw (AnalysisError);
+	void Sintatico::actual_variable() throw (AnalysisError);
+	void Sintatico::array_variable() throw (AnalysisError);
+	void Sintatico::field_identifier() throw (AnalysisError);
+	void Sintatico::constant_identifier() throw (AnalysisError);
+	void Sintatico::variable_identifier() throw (AnalysisError);
+	void Sintatico::type_identifier() throw (AnalysisError);
+	void Sintatico::procedure_identifier() throw (AnalysisError);
+	void Sintatico::function_identifier() throw (AnalysisError);
+	void Sintatico::bound_identifier() throw (AnalysisError);
 };
 
 #endif
