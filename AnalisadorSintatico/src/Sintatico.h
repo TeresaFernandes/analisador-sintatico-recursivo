@@ -113,24 +113,6 @@ private:
 	void function_designator()throw (AnalysisError);
 	//END - Expressions
 
-	//Expressions
-	void expression()throw (AnalysisError);
-	void simple_expression()throw (AnalysisError);
-	void term ()throw (AnalysisError);
-	void factor ()throw (AnalysisError);
-	bool relational_operator ()throw (AnalysisError);
-	void addition_operator ()throw (AnalysisError);
-	void multiplication_operator ()throw (AnalysisError);
-	void variable ()throw (AnalysisError);
-	void component_variable()throw (AnalysisError);
-	void indexed_variable()throw (AnalysisError);
-	void field_designator()throw (AnalysisError);
-	void list()throw (AnalysisError);
-	void set()throw (AnalysisError);
-	void element_list()throw (AnalysisError);
-	void function_designator()throw (AnalysisError);
-	//END - Expressions
-
 	// Variable and Identifier Categories
 	void Sintatico::identifier() throw (AnalysisError);
 	void Sintatico::referenced_variable() throw (AnalysisError);
