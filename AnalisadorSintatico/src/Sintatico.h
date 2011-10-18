@@ -58,6 +58,20 @@ private:
 	void statement_part() throw (AnalysisError);
 	//END - Programs and Blocks
 
+	//Procedure and Function Definitions
+	void Sintatico::procedure_heading() throw (AnalysisError);
+	void Sintatico::function_heading() throw (AnalysisError);
+	void Sintatico::result_type() throw (AnalysisError);
+	void Sintatico::formal_parameter_list() throw (AnalysisError);
+	void Sintatico::formal_parameter_section() throw (AnalysisError);
+	void Sintatico::value_parameter_section() throw (AnalysisError);
+	void Sintatico::variable_parameter_section() throw (AnalysisError);
+	void Sintatico::parameter_type() throw (AnalysisError);
+	void Sintatico::array_schema() throw (AnalysisError);
+	void Sintatico::bound_specification() throw (AnalysisError);
+	void Sintatico::ordinal_type_identifier() throw (AnalysisError);
+	//END - Procedure and Function Definitions
+
 	//Statements
 	void statement_sequence() throw (AnalysisError);
 	void statement() throw (AnalysisError);
@@ -99,6 +113,24 @@ private:
 	void function_designator()throw (AnalysisError);
 	//END - Expressions
 
+	//Expressions
+	void expression()throw (AnalysisError);
+	void simple_expression()throw (AnalysisError);
+	void term ()throw (AnalysisError);
+	void factor ()throw (AnalysisError);
+	bool relational_operator ()throw (AnalysisError);
+	void addition_operator ()throw (AnalysisError);
+	void multiplication_operator ()throw (AnalysisError);
+	void variable ()throw (AnalysisError);
+	void component_variable()throw (AnalysisError);
+	void indexed_variable()throw (AnalysisError);
+	void field_designator()throw (AnalysisError);
+	void list()throw (AnalysisError);
+	void set()throw (AnalysisError);
+	void element_list()throw (AnalysisError);
+	void function_designator()throw (AnalysisError);
+	//END - Expressions
+
 	// Variable and Identifier Categories
 	void Sintatico::identifier() throw (AnalysisError);
 	void Sintatico::referenced_variable() throw (AnalysisError);
@@ -113,6 +145,24 @@ private:
 	void Sintatico::procedure_identifier() throw (AnalysisError);
 	void Sintatico::function_identifier() throw (AnalysisError);
 	void Sintatico::bound_identifier() throw (AnalysisError);
+	//END - Variable and Identifier Categories
+
+	//Record Fields
+	void Sintatico::field_list() throw (AnalysisError);
+	void Sintatico::fixed_part() throw (AnalysisError);
+	void Sintatico::record_section() throw (AnalysisError);
+	//END - Record Fields
+
+	//Low Level Definitions
+	void Sintatico::variable_list() throw (AnalysisError);
+	void Sintatico::identifier_list() throw (AnalysisError);
+	void Sintatico::expression_list() throw (AnalysisError);
+	void Sintatico::number() throw (AnalysisError);
+	void Sintatico::integer_number() throw (AnalysisError);
+	void Sintatico::real_number() throw (AnalysisError);
+	void Sintatico::string() throw (AnalysisError);
+	void Sintatico::constant() throw (AnalysisError);
+	//END - Low Level Definitions
 };
 
 #endif
