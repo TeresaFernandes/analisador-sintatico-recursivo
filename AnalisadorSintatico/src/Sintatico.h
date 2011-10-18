@@ -142,6 +142,7 @@ private:
 	void Sintatico::number() throw (AnalysisError);
 	void Sintatico::integer_number() throw (AnalysisError);
 	void Sintatico::real_number() throw (AnalysisError);
+	void Sintatico::sign() throw (AnalysisError);
 	void Sintatico::string() throw (AnalysisError);
 	void Sintatico::constant() throw (AnalysisError);
 	//END - Low Level Definitions

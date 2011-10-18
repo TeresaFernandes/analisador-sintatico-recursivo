@@ -989,6 +989,19 @@ void Sintatico::real_number() throw (AnalysisError) {
 	match(REAL_NUMBER_);
 }
 
+void Sintatico::sign() throw (AnalysisError) {
+	switch(currentToken->getId()){
+	case PLUS_:
+		match(PLUS_);
+		break;
+	case MINUS_:
+		match(MINUS_);
+		break;
+	default:
+		throw SyntaticError("sign inválido", currentToken->getPosition());
+	}
+}
+
 void Sintatico::string() throw (AnalysisError) {
 	match(STRING_);
 
