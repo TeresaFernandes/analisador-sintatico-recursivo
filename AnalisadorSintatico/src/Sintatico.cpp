@@ -86,7 +86,7 @@ void Sintatico::declaration_part() throw (AnalysisError) {
 		type_definition_part();
 
 	if (currentToken->getId() == VAR_)
-		variable_definition_part();
+		variable_declaration_part();
 
 	procedure_and_function_declaration_part();
 }
@@ -159,16 +159,10 @@ void Sintatico::variable_declaration() throw (AnalysisError) {
 void Sintatico::procedure_and_function_declaration_part() throw (AnalysisError) {
 	while (currentToken->getId() == FUNCTION_ || currentToken->getId() == PROCEDURE_) {
 
-		switch(currentToken->getId())
-		{
-			case PROCEDURE_:
-				procedure_declaration();
-				break;
-			case FUNCTION_:
-				function_declaration();
-				break;
-			default:
-				//match(SEMI_COLON_);
+		if (currentToken->getId() == PROCEDURE_) {
+			procedure_declaration();
+		} else if (currentToken->getId() == FUNCTION_) {
+			function_declaration();
 		}
 		match(SEMI_COLON_);//TODO
 
@@ -208,6 +202,137 @@ void Sintatico::statement_part() throw (AnalysisError) {
 }
 //END - Programs and Blocks
 
+// Procedure and Function Definitions
+void Sintatico::procedure_heading() throw (AnalysisError) {
+	match(PROCEDURE_);
+	indentifier();
+	if(currentToken->getId() == LPAREN_)
+		formal_parameter_list();
+}
+
+void Sintatico::function_heading() throw (AnalysisError) {
+	match(FUNCTION_);
+
+	identifier();
+
+	if(currentToken->getId() == LPAREN_)
+			formal_parameter_list();
+
+	match(COLON_);
+
+	result_type();
+}
+
+void Sintatico::result_type() throw (AnalysisError) {
+	type_identifier();
+}
+
+void Sintatico::formal_parameter_list() throw (AnalysisError) {
+	match(LPAREN_);
+
+	formal_parameter_section();
+
+	while(currentToken->getId() == SEMI_COLON_) {
+		match(SEMI_COLON_);
+
+		formal_parameter_section();
+	}
+
+	match(RPAREN_);
+}
+
+void Sintatico::formal_parameter_section() throw (AnalysisError) {
+	switch(currentToken->getId()) {
+	case IDENTIFIER_:
+		value_parameter_section();
+		break;
+	case VAR_:
+		variable_parameter_section();
+		break;
+	default:
+		throw SyntaticError("formal_parameter_section inválido", currentToken->getPosition());
+	}
+}
+
+void Sintatico::value_parameter_section() throw (AnalysisError) {
+	identifier_list();
+
+	match(COLON_);
+
+	parameter_type();
+}
+
+void Sintatico::variable_parameter_section() throw (AnalysisError) {
+	match(VAR_);
+
+	identifier_list();
+
+	match(COLON_);
+
+	parameter_type();
+}
+
+void Sintatico::parameter_type() throw (AnalysisError) {
+	switch(currentToken->getId()) {
+	case IDENTIFIER_:
+		type_identifier();
+		break;
+	case ARRAY_:
+		array_schema();
+		break;
+	case LIST_:
+		list_type();
+		break;
+	default:
+		throw SyntaticError("parameter_type inválido", currentToken->getPosition());
+	}
+}
+
+void Sintatico::array_schema() throw (AnalysisError) {
+	match(ARRAY_);
+
+	match(RBRAC_);
+
+	bound_specification();
+
+	while(currentToken->getId() == SEMI_COLON_) {
+		match(SEMI_COLON_);
+
+		bound_specification();
+	}
+
+	match(LBRAC_);
+
+	match(OF_);
+
+	switch(currentToken->getId()){
+	case IDENTIFIER_:
+		type_identifier();
+		break;
+	case ARRAY_:
+		array_schema();
+		break;
+	default:
+		throw SyntaticError("array_schema inválido", currentToken->getPosition());
+	}
+}
+
+void Sintatico::bound_specification() throw (AnalysisError) {
+	identifier
+
+	match(DOTDOT_);
+
+	identifier();
+
+	match(COLON_);
+
+	ordinal_type_identifier();
+}
+
+void Sintatico::ordinal_type_identifier() throw (AnalysisError) {
+	type_identifier();
+}
+//END - Procedure and Function Definitions
 
 //Statements
 void Sintatico::statement_sequence() throw (AnalysisError) {
@@ -221,10 +346,9 @@ void Sintatico::statement_sequence() throw (AnalysisError) {
 }
 
 void Sintatico::statement() throw (AnalysisError) {
-	if (currentToken->getId()==IDENTIFIER_)
-	{
+	if (currentToken->getId() == IDENTIFIER_) {
 		simple_statement();
-	} else{
+	} else {
 		structured_statement();
 	}
 }
@@ -299,7 +423,7 @@ void Sintatico::structured_statement() throw (AnalysisError) {
 			conditional_statement();
 			break;
 		default:
-			throw SyntaticError(PARSER_ERROR[95], currentToken->getPosition());
+			throw SyntaticError("structured_statement inválido", currentToken->getPosition());
 	}
 }
 
@@ -321,7 +445,7 @@ void Sintatico::repetitive_statement() throw (AnalysisError) {
 			for_statement();
 			break;
 		default:
-			throw SyntaticError(PARSER_ERROR[97], currentToken->getPosition());
+			throw SyntaticError("repetitive_statement inválido", currentToken->getPosition());
 	}
 }
 
@@ -353,7 +477,7 @@ void Sintatico::for_statement() throw (AnalysisError) {
 			match(DOWNTO_);
 			break;
 		default:
-			throw SyntaticError(PARSER_ERROR[100], currentToken->getPosition());
+			throw SyntaticError("for_statement inválido", currentToken->getPosition());
 	}
 
 	final_expression();
@@ -381,7 +505,7 @@ void Sintatico::conditional_statement() throw (AnalysisError) {
 			case_statement();
 			break;
 		default:
-			throw SyntaticError(PARSER_ERROR[103], currentToken->getPosition());
+			throw SyntaticError("conditional_statement inválido", currentToken->getPosition());
 	}
 }
 
@@ -499,7 +623,7 @@ void Sintatico::actual_parameter() throw (AnalysisError) {
 			actual_value();
 			break;
 		default:
-			throw SyntaticError(PARSER_ERROR[109], currentToken->getPosition());
+			throw SyntaticError("actual_parameter inválido", currentToken->getPosition());
 	}
 }
 
@@ -790,3 +914,101 @@ void Sintatico::bound_identifier() throw (AnalysisError) {
 	identifier();
 }
 //END - Variable and Identifier Categories
+
+// Record Fields
+void Sintatico::field_list() throw (AnalysisError) {
+	if(currentToken->getId() == IDENTIFIER_) {
+		fixed_part();
+		if(currentToken->getId() == SEMI_COLON_)
+			match(SEMI_COLON_);
+	}
+
+}
+
+void Sintatico::fixed_part() throw (AnalysisError) {
+	record_section();
+
+	while(currentToken->getId() == SEMI_COLON_){
+		match(SEMI_COLON_);
+		record_section();
+	}
+}
+
+void Sintatico::record_section() throw (AnalysisError) {
+	identifier_list();
+
+	match(COLON_);
+
+	type();
+}
+//END - Record Fields
+
+// Low Level Definitions
+void Sintatico::variable_list() throw (AnalysisError) {
+	variable();
+	while(currentToken->getId() == COMMA_){
+		match(COMMA_);
+		variable();
+	}
+}
+
+void Sintatico::identifier_list() throw (AnalysisError) {
+	identifier();
+	while(currentToken->getId() == COMMA_){
+		match(COMMA_);
+		identifier();
+	}
+}
+
+void Sintatico::expression_list() throw (AnalysisError) {
+	expression();
+	while(currentToken->getId() == COMMA_){
+		match(COMMA_);
+		expression();
+	}
+}
+
+void Sintatico::number() throw (AnalysisError) {
+	switch(currentToken->getId()){
+	case INTEGER_NUMBER_:
+		integer_number();
+		break;
+	case REAL_NUMBER_:
+		real_number();
+		break;
+	default:
+		throw SyntaticError("number inválido", currentToken->getPosition());
+	}
+}
+
+void Sintatico::integer_number() throw (AnalysisError) {
+	match(INTEGER_NUMBER_);
+}
+
+void Sintatico::real_number() throw (AnalysisError) {
+	match(REAL_NUMBER_);
+}
+
+void Sintatico::string() throw (AnalysisError) {
+	match(STRING_);
+
+}
+void Sintatico::constant() throw (AnalysisError) {
+	switch(currentToken->getId()){
+	case IDENTIFIER_:
+		constant_identifier();
+		break;
+	case INTEGER_NUMBER_:
+		number();
+		break;
+	case REAL_NUMBER_:
+		number();
+		break;
+	case STRING_:
+		string();
+		break;
+	default:
+		throw SyntaticError("constant inválido", currentToken->getPosition());
+	}
+}
+// END - Low Level Definitions
