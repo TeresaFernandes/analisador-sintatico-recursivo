@@ -86,7 +86,7 @@ void Sintatico::declaration_part() throw (AnalysisError) {
 		type_definition_part();
 
 	if (currentToken->getId() == VAR_)
-		variable_declaration_part();
+		variable_definition_part();
 
 	procedure_and_function_declaration_part();
 }
@@ -348,7 +348,7 @@ void Sintatico::statement_sequence() throw (AnalysisError) {
 void Sintatico::statement() throw (AnalysisError) {
 	if (currentToken->getId() == IDENTIFIER_) {
 		simple_statement();
-	} else {
+	} else{
 		structured_statement();
 	}
 }
@@ -852,6 +852,7 @@ void Sintatico::set () throw (AnalysisError){
 
 void Sintatico::element_list () throw (AnalysisError){
 //TODO verificar antes se começa com expression, já que é opicional?
+	saveState();
 	try{
 		expression();
 		while(currentToken->getId()){
@@ -859,7 +860,7 @@ void Sintatico::element_list () throw (AnalysisError){
 			expression();
 		}
 	}catch(AnalysisError){
-
+		loadState();
 	}
 }
 
@@ -871,6 +872,157 @@ void Sintatico::function_designator () throw (AnalysisError){
 	}
 }
 //END - Expressions
+
+//Types
+void type() throw (AnalysisError){
+	saveState();
+	try{
+		simple_type();
+	}catch (AnalysisError){
+		loadState();
+		try{
+			structured_type();
+		}catch (AnalysisError){
+			loadState();
+			try{
+				pointer_type();
+			}catch(AnalysisError){
+				loadState();
+				try{
+					type_identifier();
+				}catch(AnalysisError){
+					loadState();
+				}
+			}
+		}
+	}
+}
+
+void simple_type() throw (AnalysisError){
+	saveState();
+	try{
+		subrange_type();
+	}catch (AnalysisError){
+		loadState();
+		try{
+			enumerated_type();
+		}catch (AnalysisError){
+			loadState();
+		}
+	}
+}
+
+void enumerated_type() throw (AnalysisError){
+	match(LPAREN_);
+
+	identifier_list();
+
+	match(RPAREN_);
+}
+
+void subrange_type() throw (AnalysisError){
+	lower_bound();
+
+	match(DOT_);
+
+	match(DOT_);
+
+	upper_bound();
+}
+
+void lower_bound() throw (AnalysisError){
+	contant();
+}
+
+void upper_bound () throw (AnalysisError){
+	constant();
+}
+
+void strutured_type() throw (AnalysisError){
+	saveState();
+	try{
+		array_type();
+	}catch(AnalysisError){
+		loadState();
+		try{
+			record_type();
+		}catch(AnalysisError){
+			loadState();
+			try{
+				set_type();
+			}catch(AnalysisError){
+				loadState();
+				try{
+					list_type();
+				}catch(AnalysisError){
+					loadState();
+				}
+			}
+		}
+	}
+}
+
+void array_type() throw (AnalysisError){
+	match(ARRAY_);
+
+	match(LBRAC_);
+
+	index_type();
+
+	while(currentToken->getId()==COLON_){
+		match(COLON_);
+		index_type();
+	}
+
+	match(RBRAC_);
+
+	match (OF_);
+
+	element_type();
+}
+
+void list_type() throw (AnalysisError){
+	match(LIST_);
+
+	match(OF_);
+
+	element_type();
+}
+
+void index_type() throw (AnalysisError){
+	simple_type();
+}
+
+void element_type() throw (AnalysisError){
+	type();
+}
+
+void record_type() throw (AnalysisError){
+	match(RECORD_);
+
+	field_list();
+
+	match(END_);
+}
+
+void set_type() throw (AnalysisError){
+	match(SET_);
+
+	match(OF_);
+
+	base_type();
+}
+
+void base_type() throw (AnalysisError){
+	type();
+}
+
+void pointer_type() throw (AnalysisError){
+	match(UPARROW_);
+
+	type_identifier();
+}
+//END
 
 // Variable and Identifier Categories
 void Sintatico::identifier() throw (AnalysisError) {
