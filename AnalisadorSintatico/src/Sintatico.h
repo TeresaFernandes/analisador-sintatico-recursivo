@@ -113,6 +113,24 @@ private:
 	void function_designator()throw (AnalysisError);
 	//END - Expressions
 
+	//Types
+		void type() throw (AnalysisError);
+		void simple_type() throw (AnalysisError);
+		void enumerated_type() throw (AnalysisError);
+		void subrange_type() throw (AnalysisError);
+		void lower_bound() throw (AnalysisError);
+		void upper_bound () throw (AnalysisError);
+		void strutured_type() throw (AnalysisError);
+		void array_type() throw (AnalysisError);
+		void list_type() throw (AnalysisError);
+		void index_type() throw (AnalysisError);
+		void element_type() throw (AnalysisError);
+		void record_type() throw (AnalysisError);
+		void set_type() throw (AnalysisError);
+		void base_type() throw (AnalysisError);
+		void pointer_type() throw (AnalysisError);
+	//END
+
 	// Variable and Identifier Categories
 	void Sintatico::identifier() throw (AnalysisError);
 	void Sintatico::referenced_variable() throw (AnalysisError);
