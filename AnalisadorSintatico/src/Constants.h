@@ -79,6 +79,6 @@ enum TokenId
     FALSE_				= 73
 };
 
-extern const char *PARSER_ERROR[74];
+extern const char *PARSER_ERROR[109];
 
 #endif
