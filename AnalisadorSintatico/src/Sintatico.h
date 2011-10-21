@@ -1,16 +1,15 @@
 #ifndef Sintatico_H
 #define Sintatico_H
 
-#include "Constants.h"
 #include "Token.h"
-#include "Lexico.h"
-#include "Semantico.h"
 #include "SyntaticError.h"
 
 class Sintatico
 {
 public:
-    Sintatico() : previousToken(0), currentToken(0) { }
+
+    Sintatico() {
+    }
 
     ~Sintatico()
     {
@@ -18,18 +17,16 @@ public:
         if (currentToken != 0)  delete currentToken;
     }
 
-    void parse(Lexico *scanner, Semantico *semanticAnalyser) throw (AnalysisError);
+    void parse() throw (AnalysisError);
 
 private:
+
     Token *currentToken;
     Token *previousToken;
-    Lexico *scanner;
-    Semantico *semanticAnalyser;
 
     // Atributos usados para guardar o estado da lista de lexemas.
     Token *tmp_currentToken;
 	Token *tmp_previousToken;
-	Lexico *tmp_scanner;
 	// fim.
 
     void match(int token) throw (AnalysisError);
@@ -38,6 +35,8 @@ private:
     void saveState();
     // Retorna ao estado da lista de lexemas.
     void loadState();
+    //Controe um objeto Token com base no "token" recebido, recuperando a linha e o lexema correspondentes
+    Token intToToken(int i);
 
     //Programs and Blocks
 	void program () throw (AnalysisError);
@@ -59,17 +58,17 @@ private:
 	//END - Programs and Blocks
 
 	//Procedure and Function Definitions
-	void Sintatico::procedure_heading() throw (AnalysisError);
-	void Sintatico::function_heading() throw (AnalysisError);
-	void Sintatico::result_type() throw (AnalysisError);
-	void Sintatico::formal_parameter_list() throw (AnalysisError);
-	void Sintatico::formal_parameter_section() throw (AnalysisError);
-	void Sintatico::value_parameter_section() throw (AnalysisError);
-	void Sintatico::variable_parameter_section() throw (AnalysisError);
-	void Sintatico::parameter_type() throw (AnalysisError);
-	void Sintatico::array_schema() throw (AnalysisError);
-	void Sintatico::bound_specification() throw (AnalysisError);
-	void Sintatico::ordinal_type_identifier() throw (AnalysisError);
+	void procedure_heading() throw (AnalysisError);
+	void function_heading() throw (AnalysisError);
+	void result_type() throw (AnalysisError);
+	void formal_parameter_list() throw (AnalysisError);
+	void formal_parameter_section() throw (AnalysisError);
+	void value_parameter_section() throw (AnalysisError);
+	void variable_parameter_section() throw (AnalysisError);
+	void parameter_type() throw (AnalysisError);
+	void array_schema() throw (AnalysisError);
+	void bound_specification() throw (AnalysisError);
+	void ordinal_type_identifier() throw (AnalysisError);
 	//END - Procedure and Function Definitions
 
 	//Statements
@@ -100,7 +99,7 @@ private:
 	void simple_expression()throw (AnalysisError);
 	void term ()throw (AnalysisError);
 	void factor ()throw (AnalysisError);
-	bool relational_operator ()throw (AnalysisError);
+	void relational_operator()throw (AnalysisError);
 	void addition_operator ()throw (AnalysisError);
 	void multiplication_operator ()throw (AnalysisError);
 	void variable ()throw (AnalysisError);
@@ -132,37 +131,37 @@ private:
 	//END
 
 	// Variable and Identifier Categories
-	void Sintatico::identifier() throw (AnalysisError);
-	void Sintatico::referenced_variable() throw (AnalysisError);
-	void Sintatico::record_variable() throw (AnalysisError);
-	void Sintatico::pointer_variable() throw (AnalysisError);
-	void Sintatico::actual_variable() throw (AnalysisError);
-	void Sintatico::array_variable() throw (AnalysisError);
-	void Sintatico::field_identifier() throw (AnalysisError);
-	void Sintatico::constant_identifier() throw (AnalysisError);
-	void Sintatico::variable_identifier() throw (AnalysisError);
-	void Sintatico::type_identifier() throw (AnalysisError);
-	void Sintatico::procedure_identifier() throw (AnalysisError);
-	void Sintatico::function_identifier() throw (AnalysisError);
-	void Sintatico::bound_identifier() throw (AnalysisError);
+	void identifier() throw (AnalysisError);
+	void referenced_variable() throw (AnalysisError);
+	void record_variable() throw (AnalysisError);
+	void pointer_variable() throw (AnalysisError);
+	void actual_variable() throw (AnalysisError);
+	void array_variable() throw (AnalysisError);
+	void field_identifier() throw (AnalysisError);
+	void constant_identifier() throw (AnalysisError);
+	void variable_identifier() throw (AnalysisError);
+	void type_identifier() throw (AnalysisError);
+	void procedure_identifier() throw (AnalysisError);
+	void function_identifier() throw (AnalysisError);
+	void bound_identifier() throw (AnalysisError);
 	//END - Variable and Identifier Categories
 
 	//Record Fields
-	void Sintatico::field_list() throw (AnalysisError);
-	void Sintatico::fixed_part() throw (AnalysisError);
-	void Sintatico::record_section() throw (AnalysisError);
+	void field_list() throw (AnalysisError);
+	void fixed_part() throw (AnalysisError);
+	void record_section() throw (AnalysisError);
 	//END - Record Fields
 
 	//Low Level Definitions
-	void Sintatico::variable_list() throw (AnalysisError);
-	void Sintatico::identifier_list() throw (AnalysisError);
-	void Sintatico::expression_list() throw (AnalysisError);
-	void Sintatico::number() throw (AnalysisError);
-	void Sintatico::integer_number() throw (AnalysisError);
-	void Sintatico::real_number() throw (AnalysisError);
-	void Sintatico::sign() throw (AnalysisError);
-	void Sintatico::string() throw (AnalysisError);
-	void Sintatico::constant() throw (AnalysisError);
+	void variable_list() throw (AnalysisError);
+	void identifier_list() throw (AnalysisError);
+	void expression_list() throw (AnalysisError);
+	void number() throw (AnalysisError);
+	void integer_number() throw (AnalysisError);
+	void real_number() throw (AnalysisError);
+	void sign() throw (AnalysisError);
+	void stringg() throw (AnalysisError);
+	void constant() throw (AnalysisError);
 	//END - Low Level Definitions
 };
 

@@ -1,37 +1,38 @@
 #include "Sintatico.h"
 
 void Sintatico::saveState(){
-	this->tmp_scanner = this->scanner;
 	this->tmp_currentToken = this->currentToken;
 	this->tmp_previousToken = this->previousToken;
 }
 
 void Sintatico::loadState(){
-	this->scanner = this->tmp_scanner;
 	this->currentToken = this->tmp_currentToken;
 	this->previousToken = this->tmp_previousToken;
 }
 
+Token Sintatico::intToToken (int i){
+	if (i==STRING_)
+		return Token (i, stringLexem,yylineno);
 
-void Sintatico::parse(Lexico *scanner, Semantico *semanticAnalyser) throw (AnalysisError)
+	return Token (i, yytext,yylineno);
+}
+
+void Sintatico::parse() throw (AnalysisError)
 {
-    this->scanner = scanner;
-    this->semanticAnalyser = semanticAnalyser;
-
     if (previousToken != 0 && previousToken != currentToken)
         delete previousToken;
     previousToken = 0;
 
     if (currentToken != 0)
         delete currentToken;
-    currentToken = scanner->nextToken();
+    *currentToken = intToToken(yylex());
     if (currentToken == 0)
         currentToken = new Token(DOLLAR, "$", 0);
 
     program();
 
     if (currentToken->getId() != DOLLAR)
-        throw SyntaticError(PARSER_ERROR[DOLLAR], currentToken->getPosition());
+        throw SyntaticError("DOllar", currentToken->getPosition());
 }
 
 void Sintatico::match(int token) throw (AnalysisError)
@@ -41,18 +42,18 @@ void Sintatico::match(int token) throw (AnalysisError)
         if (previousToken != 0)
             delete previousToken;
         previousToken = currentToken;
-        currentToken = scanner->nextToken();
+        *currentToken = intToToken(yylex());
         if (currentToken == 0)
         {
             int pos = 0;
             if (previousToken != 0)
-                pos = previousToken->getId()+previousToken->getLexeme().size();
+                //TODO pos = previousToken->getId() + previousToken->getLexeme().size();
 
             currentToken = new Token(DOLLAR, "$", pos);
         }
     }
     else
-        throw SyntaticError(PARSER_ERROR[token], currentToken->getPosition());
+        throw SyntaticError("", currentToken->getPosition());
 }
 
 //Programs and Blocks
@@ -86,7 +87,7 @@ void Sintatico::declaration_part() throw (AnalysisError) {
 		type_definition_part();
 
 	if (currentToken->getId() == VAR_)
-		variable_definition_part();
+		variable_declaration_part();
 
 	procedure_and_function_declaration_part();
 }
@@ -164,7 +165,7 @@ void Sintatico::procedure_and_function_declaration_part() throw (AnalysisError) 
 		} else if (currentToken->getId() == FUNCTION_) {
 			function_declaration();
 		}
-		match(SEMI_COLON_);//TODO
+		match(SEMI_COLON_);
 
 	}
 }
@@ -177,7 +178,7 @@ void Sintatico::procedure_declaration() throw (AnalysisError) {
 	procedure_body();
 }
 
-void procedure_body() throw (AnalysisError){
+void Sintatico::procedure_body() throw (AnalysisError){
 	block();
 }
 
@@ -205,7 +206,7 @@ void Sintatico::statement_part() throw (AnalysisError) {
 // Procedure and Function Definitions
 void Sintatico::procedure_heading() throw (AnalysisError) {
 	match(PROCEDURE_);
-	indentifier();
+	identifier();
 	if(currentToken->getId() == LPAREN_)
 		formal_parameter_list();
 }
@@ -250,7 +251,7 @@ void Sintatico::formal_parameter_section() throw (AnalysisError) {
 		variable_parameter_section();
 		break;
 	default:
-		throw SyntaticError("formal_parameter_section inválido", currentToken->getPosition());
+		throw SyntaticError("formal_parameter_section invï¿½lido", currentToken->getPosition());
 	}
 }
 
@@ -284,7 +285,7 @@ void Sintatico::parameter_type() throw (AnalysisError) {
 		list_type();
 		break;
 	default:
-		throw SyntaticError("parameter_type inválido", currentToken->getPosition());
+		throw SyntaticError("parameter_type invï¿½lido", currentToken->getPosition());
 	}
 }
 
@@ -313,12 +314,12 @@ void Sintatico::array_schema() throw (AnalysisError) {
 		array_schema();
 		break;
 	default:
-		throw SyntaticError("array_schema inválido", currentToken->getPosition());
+		throw SyntaticError("array_schema invï¿½lido", currentToken->getPosition());
 	}
 }
 
 void Sintatico::bound_specification() throw (AnalysisError) {
-	identifier
+	identifier();
 
 	match(DOTDOT_);
 
@@ -393,7 +394,7 @@ void Sintatico::assignment_statement() throw (AnalysisError) {
 			expression();
 			break;
 		default:
-			throw SyntaticError(PARSER_ERROR[IDENTIFIER_], currentToken->getPosition());
+			throw SyntaticError("IDENTIFIER_", currentToken->getPosition());
 	}
 }
 
@@ -423,7 +424,7 @@ void Sintatico::structured_statement() throw (AnalysisError) {
 			conditional_statement();
 			break;
 		default:
-			throw SyntaticError("structured_statement inválido", currentToken->getPosition());
+			throw SyntaticError("structured_statement invï¿½lido", currentToken->getPosition());
 	}
 }
 
@@ -445,7 +446,7 @@ void Sintatico::repetitive_statement() throw (AnalysisError) {
 			for_statement();
 			break;
 		default:
-			throw SyntaticError("repetitive_statement inválido", currentToken->getPosition());
+			throw SyntaticError("repetitive_statement invï¿½lido", currentToken->getPosition());
 	}
 }
 
@@ -477,7 +478,7 @@ void Sintatico::for_statement() throw (AnalysisError) {
 			match(DOWNTO_);
 			break;
 		default:
-			throw SyntaticError("for_statement inválido", currentToken->getPosition());
+			throw SyntaticError("for_statement invï¿½lido", currentToken->getPosition());
 	}
 
 	final_expression();
@@ -505,7 +506,7 @@ void Sintatico::conditional_statement() throw (AnalysisError) {
 			case_statement();
 			break;
 		default:
-			throw SyntaticError("conditional_statement inválido", currentToken->getPosition());
+			throw SyntaticError("conditional_statement invï¿½lido", currentToken->getPosition());
 	}
 }
 
@@ -518,7 +519,7 @@ void Sintatico::if_statement() throw (AnalysisError) {
 
 	statement();
 
-	if (currentToken->getID() == ELSE_){
+	if (currentToken->getId() == ELSE_){
 		match(ELSE_);
 		statement();
 	}
@@ -534,7 +535,7 @@ void Sintatico::case_statement() throw (AnalysisError) {
 	case_limb();
 
 	while(currentToken->getId() == SEMI_COLON_) {
-		macth(SEMI_COLON_);
+		match(SEMI_COLON_);
 
 		case_limb();
 	}
@@ -556,7 +557,7 @@ void Sintatico::case_limb() throw (AnalysisError) {
 void Sintatico::case_label_list() throw (AnalysisError) {
 	constant();
 	while(currentToken->getId() == COMMA_) {
-		macth(COMMA_);
+		match(COMMA_);
 
 		constant();
 	}
@@ -604,7 +605,7 @@ void Sintatico::actual_parameter() throw (AnalysisError) {
 		case SET_:
 			actual_value();
 			break;
-		case CHAR_://TODO verificar na gramatica a manipulação de 'chars'
+		case CHAR_:
 			actual_value();
 			break;
 		case NIL_:
@@ -616,14 +617,17 @@ void Sintatico::actual_parameter() throw (AnalysisError) {
 		case LPAREN_:
 			actual_value();
 			break;
-		case LBRAC_://TODO mudar o simbolo de lista para "[|" e "|]"
+		case LBRAC_BAR_:
 			actual_value();
 			break;
-		case SIGN_://TODO adicionar token no lexico
+		case MINUS_: //case SIGN_:
+			actual_value();
+			break;
+		case PLUS_:
 			actual_value();
 			break;
 		default:
-			throw SyntaticError("actual_parameter inválido", currentToken->getPosition());
+			throw SyntaticError("actual_parameter invï¿½lido", currentToken->getPosition());
 	}
 }
 
@@ -636,7 +640,8 @@ void Sintatico::actual_value() throw (AnalysisError) {
 void Sintatico::expression()throw (AnalysisError){
 	simple_expression();
 
-	if (currentToken->getId()==RELATIONAL_OPERATOR_){//TODO adicionar token no lexico
+	if (currentToken->getId()==EQUAL_ || currentToken->getId()==NOTEQUAL_ || currentToken->getId()==LT_ || currentToken->getId()==LE_
+			|| currentToken->getId()==GT_||currentToken->getId()==GE_||currentToken->getId()==IN_){
 		relational_operator();
 		simple_expression();
 	}
@@ -645,11 +650,11 @@ void Sintatico::expression()throw (AnalysisError){
 
 
 void Sintatico::simple_expression()throw (AnalysisError){
-	if (currentToken->getId()==SIGN_){//TODO adicionar token no lexico
-		match(SIGN_);
+	if (currentToken->getId()==PLUS_ ||currentToken->getId()==MINUS_ ){//
+		sign();
 	}
 	term();
-	while(currentToken->getId()==ADDITIONAL_OPERATOR_){//TODO adicionar token no lexico
+	while(currentToken->getId()==PLUS_ || currentToken->getId()== MINUS_ || currentToken->getId()==OR_){
 		addition_operator();
 		term();
 	}
@@ -658,14 +663,16 @@ void Sintatico::simple_expression()throw (AnalysisError){
 
 void Sintatico::term()throw (AnalysisError){
 	factor();
-	while(currentToken->getId()==MULTIPLICATION_OPERATOR){//TODO adicionar token no lexico
+	while(currentToken->getId()==OP_MULT_ || currentToken->getId()==OP_DIV_ || currentToken->getId()==DIV_
+			|| currentToken->getId()==MOD_ || currentToken->getId()==AND_){
+
 		multiplication_operator();
 		factor();
 	}
 }
 
 
-void factor()throw (AnalysisError){
+void Sintatico::factor()throw (AnalysisError){
 	switch (currentToken->getId())
 		{
 			case IDENTIFIER_:
@@ -687,14 +694,13 @@ void factor()throw (AnalysisError){
 						try{
 							bound_identifier();
 						}catch(AnalysisError){
-							// Retorno o estado da lista de lexemas.
+
 							loadState();
 
 							try{
 								function_designator();
 							}catch (AnalysisError){
-								// Retorno o estado da lista de lexemas.
-								loadState();//TODO é para retornar ao estado mesmo?
+								loadState();
 							}
 						}
 					}
@@ -707,7 +713,7 @@ void factor()throw (AnalysisError){
 				number();
 				break;
 			case STRING_:
-				string();
+				stringg();
 				break;
 			case SET_:
 				set();
@@ -716,7 +722,7 @@ void factor()throw (AnalysisError){
 				match(NIL_);
 				break;
 			case CHAR_:
-				charr();//TODO criar uma definição na gramatica
+				//TODO charr(); criar uma definiï¿½ï¿½o na gramatica
 				break;
 			case LPAREN_:
 				match(LPAREN_);
@@ -727,7 +733,7 @@ void factor()throw (AnalysisError){
 				match(NOT_);
 				factor();
 				break;
-			case LBRAC_:
+			case LBRAC_BAR_:
 				list();
 				break;
 			default:
@@ -736,29 +742,59 @@ void factor()throw (AnalysisError){
 }
 
 void Sintatico::relational_operator()throw (AnalysisError){
-	match(RELATIONAL_OPERATOR_);
+	switch(currentToken->getId()){
+		case EQUAL_: match(EQUAL_);break;
+		case NOTEQUAL_: match(NOTEQUAL_);break;
+		case LT_: match(LT_);break;
+		case LE_: match(LE_);break;
+		case GT_: match(GT_);break;
+		case GE_: match(GE_);break;
+		case IN_: match(IN_);break;
+
+		default:
+			throw SyntaticError("Era esperado um operador condicional", currentToken->getPosition());
+
+	}
 }
 
-void addition_operator ()throw (AnalysisError){
-	match(ADDITIONAL_OPERATOR_);
+void Sintatico::addition_operator ()throw (AnalysisError){
+	switch(currentToken->getId()){
+		case PLUS_: match(PLUS_);break;
+		case MINUS_: match(MINUS_);break;
+		case OR_: match(OR_);break;
+
+		default:
+			throw SyntaticError("Era esperado um operador de adiÃ§Ã£o", currentToken->getPosition());
+
+	}
 }
 
-void multiplication_operator ()throw (AnalysisError){
-	match(MULTIPLICATION_OPERATOR_);//TODO adicionar token no lexico
+void Sintatico::multiplication_operator ()throw (AnalysisError){
+	switch(currentToken->getId()){
+		case OP_MULT_: match(OP_MULT_);break;
+		case OP_DIV_: match(OP_DIV_);break;
+		case DIV_: match(DIV_);break;
+		case MOD_: match(MOD_);break;
+		case AND_: match(AND_);break;
+
+		default:
+			throw SyntaticError("Era esperado um operador de multiplicaÃ§Ã£o", currentToken->getPosition());
+
+	}
 }
 
-void variable ()throw (AnalysisError){
+void Sintatico::variable ()throw (AnalysisError){
 	switch(currentToken->getId()){
 		case IDENTIFIER_:
-			saveStatus();
+			saveState();
 			try{
 				variable_identifier();
 			}catch (AnalysisError){
-				loadStatus();
+				loadState();
 				try{
 					component_variable();
 				}catch (AnalysisError){
-					loadStatus();
+					loadState();
 					try{
 						referenced_variable();
 					}catch (AnalysisError){
@@ -774,7 +810,7 @@ void variable ()throw (AnalysisError){
 }
 
 void Sintatico::component_variable()throw (AnalysisError){
-//não precisa verificar novamente se é um identificador pq o metodo só eh chamado se o token atual for um identificador
+//nï¿½o precisa verificar novamente se ï¿½ um identificador pq o metodo sï¿½ eh chamado se o token atual for um identificador
 	saveState();
 
 	try{
@@ -808,7 +844,7 @@ void Sintatico::field_designator()throw (AnalysisError){
 	field_identifier();
 }
 
-void Sintatico::list()throw (AnalysisError){//TODO mudança da regra de list na gramática para evitar a recursão a esquerda
+void Sintatico::list()throw (AnalysisError){
 	switch(currentToken->getId()){
 		case IDENTIFIER_:
 			identifier();
@@ -819,12 +855,12 @@ void Sintatico::list()throw (AnalysisError){//TODO mudança da regra de list na g
 			}
 
 			break;
-		case LBRAC_:
-			match(LBRAC_BAR);//TODO adicionar token no lexico
+		case LBRAC_BAR_:
+			match(LBRAC_BAR_);
 
 			element_list();
 
-			match(RBRAC_BAR);//TODO adicionar token no lexico
+			match(RBRAC_BAR_);
 
 			if(currentToken->getId()==ARROBA_){
 				match(ARROBA_);
@@ -851,7 +887,7 @@ void Sintatico::set () throw (AnalysisError){
 }
 
 void Sintatico::element_list () throw (AnalysisError){
-//TODO verificar antes se começa com expression, já que é opicional?
+
 	saveState();
 	try{
 		expression();
@@ -874,14 +910,14 @@ void Sintatico::function_designator () throw (AnalysisError){
 //END - Expressions
 
 //Types
-void type() throw (AnalysisError){
+void Sintatico::type() throw (AnalysisError){
 	saveState();
 	try{
 		simple_type();
 	}catch (AnalysisError){
 		loadState();
 		try{
-			structured_type();
+			strutured_type();
 		}catch (AnalysisError){
 			loadState();
 			try{
@@ -898,7 +934,7 @@ void type() throw (AnalysisError){
 	}
 }
 
-void simple_type() throw (AnalysisError){
+void Sintatico::simple_type() throw (AnalysisError){
 	saveState();
 	try{
 		subrange_type();
@@ -912,7 +948,7 @@ void simple_type() throw (AnalysisError){
 	}
 }
 
-void enumerated_type() throw (AnalysisError){
+void Sintatico::enumerated_type() throw (AnalysisError){
 	match(LPAREN_);
 
 	identifier_list();
@@ -920,7 +956,7 @@ void enumerated_type() throw (AnalysisError){
 	match(RPAREN_);
 }
 
-void subrange_type() throw (AnalysisError){
+void Sintatico::subrange_type() throw (AnalysisError){
 	lower_bound();
 
 	match(DOT_);
@@ -930,15 +966,15 @@ void subrange_type() throw (AnalysisError){
 	upper_bound();
 }
 
-void lower_bound() throw (AnalysisError){
-	contant();
-}
-
-void upper_bound () throw (AnalysisError){
+void Sintatico::lower_bound() throw (AnalysisError){
 	constant();
 }
 
-void strutured_type() throw (AnalysisError){
+void Sintatico::upper_bound () throw (AnalysisError){
+	constant();
+}
+
+void Sintatico::strutured_type() throw (AnalysisError){
 	saveState();
 	try{
 		array_type();
@@ -962,7 +998,7 @@ void strutured_type() throw (AnalysisError){
 	}
 }
 
-void array_type() throw (AnalysisError){
+void Sintatico::array_type() throw (AnalysisError){
 	match(ARRAY_);
 
 	match(LBRAC_);
@@ -981,7 +1017,7 @@ void array_type() throw (AnalysisError){
 	element_type();
 }
 
-void list_type() throw (AnalysisError){
+void Sintatico::list_type() throw (AnalysisError){
 	match(LIST_);
 
 	match(OF_);
@@ -989,15 +1025,15 @@ void list_type() throw (AnalysisError){
 	element_type();
 }
 
-void index_type() throw (AnalysisError){
+void Sintatico::index_type() throw (AnalysisError){
 	simple_type();
 }
 
-void element_type() throw (AnalysisError){
+void Sintatico::element_type() throw (AnalysisError){
 	type();
 }
 
-void record_type() throw (AnalysisError){
+void Sintatico::record_type() throw (AnalysisError){
 	match(RECORD_);
 
 	field_list();
@@ -1005,7 +1041,7 @@ void record_type() throw (AnalysisError){
 	match(END_);
 }
 
-void set_type() throw (AnalysisError){
+void Sintatico::set_type() throw (AnalysisError){
 	match(SET_);
 
 	match(OF_);
@@ -1013,11 +1049,11 @@ void set_type() throw (AnalysisError){
 	base_type();
 }
 
-void base_type() throw (AnalysisError){
+void Sintatico::base_type() throw (AnalysisError){
 	type();
 }
 
-void pointer_type() throw (AnalysisError){
+void Sintatico::pointer_type() throw (AnalysisError){
 	match(UPARROW_);
 
 	type_identifier();
@@ -1129,7 +1165,7 @@ void Sintatico::number() throw (AnalysisError) {
 		real_number();
 		break;
 	default:
-		throw SyntaticError("number inválido", currentToken->getPosition());
+		throw SyntaticError("number invï¿½lido", currentToken->getPosition());
 	}
 }
 
@@ -1150,14 +1186,14 @@ void Sintatico::sign() throw (AnalysisError) {
 		match(MINUS_);
 		break;
 	default:
-		throw SyntaticError("sign inválido", currentToken->getPosition());
+		throw SyntaticError("sign invï¿½lido", currentToken->getPosition());
 	}
 }
 
-void Sintatico::string() throw (AnalysisError) {
+void Sintatico::stringg() throw (AnalysisError) {
 	match(STRING_);
-
 }
+
 void Sintatico::constant() throw (AnalysisError) {
 	switch(currentToken->getId()){
 	case IDENTIFIER_:
@@ -1170,10 +1206,16 @@ void Sintatico::constant() throw (AnalysisError) {
 		number();
 		break;
 	case STRING_:
-		string();
+		stringg();
 		break;
 	default:
-		throw SyntaticError("constant inválido", currentToken->getPosition());
+		throw SyntaticError("constant invï¿½lido", currentToken->getPosition());
 	}
 }
 // END - Low Level Definitions
+
+int main(){
+	Sintatico s;
+	s.parse();
+	return 0;
+}
