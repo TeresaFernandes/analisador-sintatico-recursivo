@@ -5,20 +5,25 @@
 
 #include <string>
 
-class Token
-{
-public:
-    Token(TokenId id, const std::string &lexeme, int position)
-      : id(id), lexeme(lexeme), position(position) { }
+class Token {
+	private:
+		TokenId id;
+		std::string lexeme;
+		int position;
 
-    TokenId getId() const { return id; }
-    const std::string &getLexeme() const { return lexeme; }
-    int getPosition() const { return position; }
+	public:
 
-private:
-    TokenId id;
-    std::string lexeme;
-    int position;
+		Token(){}
+		Token(TokenId id, const std::string &lexeme, int position){
+			this->id = id;
+			this->lexeme = lexeme;
+			this->position = position;
+		}
+
+		TokenId getId() const { return id; }
+		const std::string &getLexeme() const { return lexeme; }
+		int getPosition() const { return position; }
+
 };
 
 #endif
