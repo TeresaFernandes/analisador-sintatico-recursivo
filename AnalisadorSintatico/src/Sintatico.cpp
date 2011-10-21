@@ -37,7 +37,7 @@ void Sintatico::parse() throw (AnalysisError)
     program();
 
     if (currentToken->getId() != DOLLAR)
-        throw SyntaticError("Dollar", currentToken->getPosition());
+        throw SyntaticError((char *)"Dollar", currentToken->getPosition());
 }
 
 void Sintatico::match(int token) throw (AnalysisError)
@@ -58,7 +58,7 @@ void Sintatico::match(int token) throw (AnalysisError)
         }
     }
     else
-        throw SyntaticError("", currentToken->getPosition());
+        throw SyntaticError((char *)"", currentToken->getPosition());
 }
 
 //Programs and Blocks
@@ -256,7 +256,7 @@ void Sintatico::formal_parameter_section() throw (AnalysisError) {
 		variable_parameter_section();
 		break;
 	default:
-		throw SyntaticError("formal_parameter_section inv�lido", currentToken->getPosition());
+		throw SyntaticError((char *)"formal_parameter_section inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -290,7 +290,7 @@ void Sintatico::parameter_type() throw (AnalysisError) {
 		list_type();
 		break;
 	default:
-		throw SyntaticError("parameter_type inv�lido", currentToken->getPosition());
+		throw SyntaticError((char *)"parameter_type inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -319,7 +319,7 @@ void Sintatico::array_schema() throw (AnalysisError) {
 		array_schema();
 		break;
 	default:
-		throw SyntaticError("array_schema inv�lido", currentToken->getPosition());
+		throw SyntaticError((char *)"array_schema inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -399,7 +399,7 @@ void Sintatico::assignment_statement() throw (AnalysisError) {
 			expression();
 			break;
 		default:
-			throw SyntaticError("IDENTIFIER_", currentToken->getPosition());
+			throw SyntaticError((char *)"IDENTIFIER_", currentToken->getPosition());
 	}
 }
 
@@ -429,7 +429,7 @@ void Sintatico::structured_statement() throw (AnalysisError) {
 			conditional_statement();
 			break;
 		default:
-			throw SyntaticError("structured_statement inv�lido", currentToken->getPosition());
+			throw SyntaticError((char *)"structured_statement inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -451,7 +451,7 @@ void Sintatico::repetitive_statement() throw (AnalysisError) {
 			for_statement();
 			break;
 		default:
-			throw SyntaticError("repetitive_statement inv�lido", currentToken->getPosition());
+			throw SyntaticError((char *)"repetitive_statement inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -483,7 +483,7 @@ void Sintatico::for_statement() throw (AnalysisError) {
 			match(DOWNTO_);
 			break;
 		default:
-			throw SyntaticError("for_statement inv�lido", currentToken->getPosition());
+			throw SyntaticError((char *)"for_statement inv�lido", currentToken->getPosition());
 	}
 
 	final_expression();
@@ -511,7 +511,7 @@ void Sintatico::conditional_statement() throw (AnalysisError) {
 			case_statement();
 			break;
 		default:
-			throw SyntaticError("conditional_statement inv�lido", currentToken->getPosition());
+			throw SyntaticError((char *)"conditional_statement inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -632,7 +632,7 @@ void Sintatico::actual_parameter() throw (AnalysisError) {
 			actual_value();
 			break;
 		default:
-			throw SyntaticError("actual_parameter inv�lido", currentToken->getPosition());
+			throw SyntaticError((char *)"actual_parameter inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -742,7 +742,7 @@ void Sintatico::factor()throw (AnalysisError){
 				list();
 				break;
 			default:
-				throw SyntaticError("Era esperado FACTOR", currentToken->getPosition());
+				throw SyntaticError((char *)"Era esperado FACTOR", currentToken->getPosition());
 		}
 }
 
@@ -757,7 +757,7 @@ void Sintatico::relational_operator()throw (AnalysisError){
 		case IN_: match(IN_);break;
 
 		default:
-			throw SyntaticError("Era esperado um operador condicional", currentToken->getPosition());
+			throw SyntaticError((char *)"Era esperado um operador condicional", currentToken->getPosition());
 
 	}
 }
@@ -769,7 +769,7 @@ void Sintatico::addition_operator ()throw (AnalysisError){
 		case OR_: match(OR_);break;
 
 		default:
-			throw SyntaticError("Era esperado um operador de adição", currentToken->getPosition());
+			throw SyntaticError((char *)"Era esperado um operador de adição", currentToken->getPosition());
 
 	}
 }
@@ -783,7 +783,7 @@ void Sintatico::multiplication_operator ()throw (AnalysisError){
 		case AND_: match(AND_);break;
 
 		default:
-			throw SyntaticError("Era esperado um operador de multiplicação", currentToken->getPosition());
+			throw SyntaticError((char *)"Era esperado um operador de multiplicação", currentToken->getPosition());
 
 	}
 }
@@ -810,7 +810,7 @@ void Sintatico::variable ()throw (AnalysisError){
 			break;
 
 		default:
-			throw SyntaticError("Era esperado um identificador", currentToken->getPosition());
+			throw SyntaticError((char *)"Era esperado um identificador", currentToken->getPosition());
 	}
 }
 
@@ -1171,7 +1171,7 @@ void Sintatico::number() throw (AnalysisError) {
 		real_number();
 		break;
 	default:
-		throw SyntaticError("number inv�lido", currentToken->getPosition());
+		throw SyntaticError((char *)"number inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -1192,7 +1192,7 @@ void Sintatico::sign() throw (AnalysisError) {
 		match(MINUS_);
 		break;
 	default:
-		throw SyntaticError("sign inv�lido", currentToken->getPosition());
+		throw SyntaticError((char *)"sign inv�lido", currentToken->getPosition());
 	}
 }
 
@@ -1215,7 +1215,7 @@ void Sintatico::constant() throw (AnalysisError) {
 		stringg();
 		break;
 	default:
-		throw SyntaticError("constant inv�lido", currentToken->getPosition());
+		throw SyntaticError((char *)"constant inv�lido", currentToken->getPosition());
 	}
 }
 // END - Low Level Definitions

@@ -6,19 +6,19 @@
 class AnalysisError{
 
 	protected:
-		string message;
+		char * message;
 		int position;
 
 
 	public:
 		AnalysisError(){}
 
-		AnalysisError(string msg, int position = -1){
+		AnalysisError(char* msg, int position = -1){
 			this->message = msg;
 			this->position = position;
 		}
 
-		string getMessage() const { return message; }
+		char* getMessage() const { return message; }
 		int getPosition() const { return position; }
 
 };
