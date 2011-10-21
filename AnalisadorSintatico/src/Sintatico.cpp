@@ -26,13 +26,18 @@ void Sintatico::parse() throw (AnalysisError)
     if (currentToken != 0)
         delete currentToken;
     *currentToken = intToToken(yylex());
-    if (currentToken == 0)
-        currentToken = new Token(DOLLAR, "$", 0);
+
+
+    if (currentToken == 0){
+    	char *a;
+    	*a = '$';
+        currentToken = new Token(DOLLAR, a, 0);
+    }
 
     program();
 
     if (currentToken->getId() != DOLLAR)
-        throw SyntaticError("DOllar", currentToken->getPosition());
+        throw SyntaticError("Dollar", currentToken->getPosition());
 }
 
 void Sintatico::match(int token) throw (AnalysisError)
@@ -45,8 +50,11 @@ void Sintatico::match(int token) throw (AnalysisError)
         *currentToken = intToToken(yylex());
         if (currentToken == 0)
         {
-            if (previousToken != 0)
-            currentToken = new Token(DOLLAR, "$", 0);
+            if (previousToken != 0){
+            	char *a;
+            	*a = '$';
+            	currentToken = new Token(DOLLAR, a, 0);
+            }
         }
     }
     else

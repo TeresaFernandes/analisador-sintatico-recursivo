@@ -9,7 +9,7 @@ class SyntaticError : public AnalysisError
 {
 public:
 
-    SyntaticError(const char* msg, int position = -1){
+    SyntaticError(string msg, int position = -1){
     	this->message = msg;
     	this->position = position;
     }

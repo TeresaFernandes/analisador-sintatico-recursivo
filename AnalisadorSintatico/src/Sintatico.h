@@ -9,6 +9,8 @@ class Sintatico
 public:
 
     Sintatico() {
+    	yyin = fopen("Lexico/data.in");
+    	yyout = fopen("Lexico/data.out");
     }
 
     ~Sintatico()

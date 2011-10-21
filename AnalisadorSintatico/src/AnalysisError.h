@@ -5,20 +5,20 @@
 
 class AnalysisError{
 
-	private:
-		char * message;
+	protected:
+		string message;
 		int position;
 
 
 	public:
 		AnalysisError(){}
 
-		AnalysisError(char* msg, int position = -1){
+		AnalysisError(string msg, int position = -1){
 			this->message = msg;
 			this->position = position;
 		}
 
-		const char* getMessage() const { return message; }
+		string getMessage() const { return message; }
 		int getPosition() const { return position; }
 
 };
