@@ -9,8 +9,10 @@ class SyntaticError : public AnalysisError
 {
 public:
 
-    SyntaticError(const std::string &msg, int position = -1)
-      : AnalysisError(msg, position) { }
+    SyntaticError(const char* msg, int position = -1){
+    	this->message = msg;
+    	this->position = position;
+    }
 };
 
 #endif

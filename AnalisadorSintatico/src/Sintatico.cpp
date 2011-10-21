@@ -45,11 +45,8 @@ void Sintatico::match(int token) throw (AnalysisError)
         *currentToken = intToToken(yylex());
         if (currentToken == 0)
         {
-            int pos = 0;
             if (previousToken != 0)
-                //TODO pos = previousToken->getId() + previousToken->getLexeme().size();
-
-            currentToken = new Token(DOLLAR, "$", pos);
+            currentToken = new Token(DOLLAR, "$", 0);
         }
     }
     else
@@ -874,6 +871,7 @@ void Sintatico::list()throw (AnalysisError){
 			match(CONS_);
 
 			list();
+			break;
 	}
 
 }
