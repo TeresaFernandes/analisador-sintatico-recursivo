@@ -115,13 +115,7 @@ char				['].[']
 {char}				{return (CHAR_);}
 
 .				{printf("LINE %d:Caractere desconhecido", yylineno);return ZERO_PARA_A_EXECUCAO;}
-		
+<<EOF>>				{printf ("fim");yyterminate();return (DOLLAR);}		
 		
 %%
-int main(){
-yylex();
-printf("%s",yytext);
-yylex();
-printf("%s",yytext);
-return 0;
-}
+
