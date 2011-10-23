@@ -1,13 +1,8 @@
 #include<stdio.h>
-
 class Token
 {
 public:
-  Token(){
-    this->id=-1;
-    this->lexeme=0;
-    this->line=0;
-  }
+  Token(){}
   Token(int t, char * l, int ln){
     this->id=t;
     this->lexeme=l;

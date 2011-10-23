@@ -1,6 +1,5 @@
 #include<iostream>
 #include "lex.yy.c"
-#include "Token.h"
 #include "ErroSintatico.h"
 
 using namespace std;

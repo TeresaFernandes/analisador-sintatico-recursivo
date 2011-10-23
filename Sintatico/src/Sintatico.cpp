@@ -44,6 +44,7 @@ void Sintatico::parse() throw (ErroSintatico)
     	currentToken = new Token(DOLLAR,(char *) "$", 0);
     }
     
+    
     program();
   
     if (currentToken->id != DOLLAR)
@@ -52,15 +53,17 @@ void Sintatico::parse() throw (ErroSintatico)
 
 void Sintatico:: match(int token) throw (ErroSintatico)
 {
-  
-    if (currentToken->id == token)
+    
+      if (currentToken->id == token)
     {
+	printf("match %s\n", currentToken->lexeme);
         if (!previousToken->isNull())
             delete previousToken;
 	
         previousToken = currentToken;
         *currentToken = intToToken(yylex());
-	printf("passou");
+	printf("currentToken = %d %s %d | priviuosTOken = %d %s %d\n", currentToken->id,currentToken->lexeme, currentToken->line, previousToken->id, previousToken->lexeme, previousToken->line);
+	
         if (currentToken->isNull())
         {
             if (!previousToken->isNull()){
@@ -83,7 +86,6 @@ void Sintatico::program () throw (ErroSintatico) {
 
 void Sintatico::program_heading() throw (ErroSintatico) {
 	match(PROGRAM_);
-
 	identifier();
 
 	match(SEMI_COLON_);
