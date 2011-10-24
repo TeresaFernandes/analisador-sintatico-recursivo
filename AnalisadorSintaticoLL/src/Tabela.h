@@ -1,0 +1,166 @@
+/*
+ * Tabela.h
+ *
+ *  Created on: 23/10/2011
+ *      Author: Claudio
+ */
+
+#ifndef TABELA_H_
+#define TABELA_H_
+#define SIZE 135
+#include <iostream>
+#include <map>
+#include <vector>
+
+using namespace std;
+
+enum {
+	DOLLAR,
+	STRING_,
+	REAL_NUMBER_,
+	INTEGER_NUMBER_,
+	IDENTIFIER_,
+	SET_,
+	OF_,
+	RECORD_,
+	END_,
+	LIST_,
+	ARRAY_,
+	IN_,
+	NOT_,
+	NIL_,
+	CASE_,
+	ELSE_,
+	THEN_,
+	IF_,
+	DO_,
+	DOWNTO_,
+	TO_,
+	FOR_,
+	WHILE_,
+	BEGIN_,
+	ASSIGNMENT_,
+	VAR_,
+	DIV_,
+	MOD_,
+	AND_,
+	OR_,
+	FUNCTION_,
+	PROCEDURE_,
+	TYPE_,
+	CONST_,
+	PROGRAM_,
+	COMMA_,
+	DOT_,
+	UPARROW_,
+	COLON_,
+	SEMI_COLON_,
+	DOTDOT_,
+	LBRAC_,
+	RBRAC_,
+	LPAREN_,
+	RPAREN_,
+	ARROBA_,
+	LBRAC_BAR_,
+	RBRAC_BAR_,
+	CONS_,
+	OP_MULT_,
+	OP_DIV_,
+	EQUAL_,
+	NOTEQUAL_,
+	LT_,
+	LE_,
+	GT_,
+	GE_,
+	SIGN_,
+	program,
+	program_heading,
+	block,
+	declaration_part,
+	constant_definition_part,
+	constant_definition,
+	type_definition_part,
+	type_definition,
+	variable_declaration_part,
+	variable_declaration,
+	procedure_and_function_declaration_part,
+	procedure_declaration,
+	function_declaration,
+	statement_part,
+	procedure_heading,
+	function_heading,
+	formal_parameter_list,
+	formal_parameter_section,
+	value_parameter_section,
+	variable_parameter_section,
+	parameter_type,
+	array_schema,
+	bound_specification,
+	statement_sequence,
+	statement,
+	simple_statement,
+	assignment_statement,
+	procedure_statement,
+	structured_statement,
+	compound_statement,
+	repetitive_statement,
+	while_statement,
+	for_statement,
+	conditional_statement,
+	if_statement,
+	case_statement,
+	case_limb,
+	case_label_list,
+	actual_parameter_list,
+	expression,
+	simple_expression,
+	term,
+	factor,
+	factor_aux,
+	relational_operator,
+	addition_operator,
+	multiplication_operator,
+	variable,
+	variable_aux,
+	component_variable,
+	indexed_variable,
+	field_designator,
+	list,
+	list_aux,
+	set,
+	element_list,
+	type,
+	simple_type,
+	simple_type_aux,
+	enumerated_type,
+	subrange_type,
+	subrange_type_aux,
+	consant_aux,
+	structured_type,
+	array_type,
+	list_type,
+	record_type,
+	set_type,
+	pointer_type,
+	field_list,
+	fixed_part,
+	record_section,
+	identifier_list,
+	expression_list,
+	number,
+	sign,
+	constant};
+
+class Tabela {
+public:
+	Tabela();
+	virtual ~Tabela();
+
+
+	int * tabela[SIZE][SIZE];
+
+
+	void buildTabela();
+};
+
+#endif /* TABELA_H_ */
