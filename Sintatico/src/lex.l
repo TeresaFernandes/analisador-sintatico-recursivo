@@ -6,8 +6,8 @@
 char * stringLexem;
 
 /* Quando retorno o enum ZERO "0", o sistema para a execução. Podemos usar futuramente como um token de ERRO*/
-
-enum TokenId{ZERO_PARA_A_EXECUCAO,DOLLAR,  STRING_, CHAR_, REAL_NUMBER_, INTEGER_NUMBER_, BOOLEAN_, IDENTIFIER_, SET_, OF_, RECORD_, END_, LIST_, ARRAY_, IN_, NOT_, NIL_, CASE_, ELSE_, THEN_, IF_, DO_, DOWNTO_, TO_, FOR_, WHILE_, BEGIN_, ASSIGNMENT_, VAR_, DIV_, MOD_, AND_, OR_, WRITE_, WRITELN_, READ_, READLN_, FUNCTION_, PROCEDURE_, TYPE_, CONST_, PROGRAM_, USES_, COMMA_, DOT_,UPARROW_, COLON_, SEMI_COLON_, DOTDOT_, LBRAC_, RBRAC_, LPAREN_, RPAREN_, ARROBA_, LBRAC_BAR_, RBRAC_BAR_, CONS_, OP_MULT_, OP_DIV_, EQUAL_, NOTEQUAL_, LT_, LE_, GT_, GE_, TYPE_INTEGER_, TYPE_REAL_, TYPE_CHAR_, TYPE_STRING_, TYPE_BOOLEAN_, TRUE_, FALSE_, SIGN_};
+ //TYPE_INTEGER_, TYPE_REAL_, TYPE_CHAR_, TYPE_STRING_, TYPE_BOOLEAN_, TRUE_, FALSE_USES_,BOOLEAN_,CHAR_,
+enum TokenId{DOLLAR,  STRING_, REAL_NUMBER_, INTEGER_NUMBER_, IDENTIFIER_, SET_, OF_, RECORD_, END_, LIST_, ARRAY_, IN_, NOT_, NIL_, CASE_, ELSE_, THEN_, IF_, DO_, DOWNTO_, TO_, FOR_, WHILE_, BEGIN_, ASSIGNMENT_, VAR_, DIV_, MOD_, AND_, OR_, WRITE_, WRITELN_, READ_, READLN_, FUNCTION_, PROCEDURE_, TYPE_, CONST_, PROGRAM_, COMMA_, DOT_,UPARROW_, COLON_, SEMI_COLON_, DOTDOT_, LBRAC_, RBRAC_, LPAREN_, RPAREN_, ARROBA_, LBRAC_BAR_, RBRAC_BAR_, CONS_, OP_MULT_, OP_DIV_, EQUAL_, NOTEQUAL_, LT_, LE_, GT_, GE_, SIGN_};
 
 
 %}
@@ -66,7 +66,6 @@ char				['].[']
 "for" 				{return (FOR_);}
 "while" 			{return (WHILE_);}
 "begin" 			{return (BEGIN_);}
-"uses"				{return (USES_);}
 "var"				{return (VAR_);}
 "function" 			{return (FUNCTION_);}
 "procedure" 			{return (PROCEDURE_);}
@@ -77,13 +76,6 @@ char				['].[']
 "readln"			{return (READLN_);}
 "read"				{return (READ_);}
 "writeln"			{return (WRITELN_);}
-"integer"			{return (TYPE_INTEGER_);}
-"real"				{return (TYPE_REAL_);}
-"boolean"			{return (TYPE_BOOLEAN_);}
-"char"				{return (TYPE_CHAR_);}
-"string"			{return (TYPE_STRING_);}
-"false"				{return (BOOLEAN_);}
-"true"				{return (BOOLEAN_);}
 ".." 				{return (DOTDOT_);}
 ","    				{return (COMMA_);}
 "."    				{return (DOT_);}
@@ -112,10 +104,10 @@ char				['].[']
 {id}				{return (IDENTIFIER_);}
 {integer_number}		{return (INTEGER_NUMBER_);}
 {real_number}			{return (REAL_NUMBER_);}
-{char}				{return (CHAR_);}
 
-.				{printf("LINE %d:Caractere desconhecido", yylineno);return ZERO_PARA_A_EXECUCAO;}
-<<EOF>>				{printf ("fim");yyterminate();return (DOLLAR);}		
+
+.				{printf("LINE %d:Caractere desconhecido", yylineno);}
+<<EOF>>				{yytext=(char*)"$";return (DOLLAR);}
+		
 		
 %%
-

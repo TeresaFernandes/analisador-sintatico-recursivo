@@ -13,24 +13,17 @@ public:
 
 //private:
 
-    Token *currentToken;
-    Token *previousToken;
-
-    // Atributos usados para guardar o estado da lista de lexemas.
-    Token *tmp_currentToken;
-    Token *tmp_previousToken;
-	// fim.
+    Token currentToken;
 
     void match(int token) throw (ErroSintatico) ;
-
-	// Guarda o estado da lista de lexemas.
+    // Guarda o estado da lista de lexemas.
     void saveState();
     // Retorna ao estado da lista de lexemas.
     void loadState();
     //Controe um objeto Token com base no "token" recebido, recuperando a linha e o lexema correspondentes
     Token intToToken(int i);
 
-	    //Programs and Blocks
+     //Programs and Blocks
     void program () throw (ErroSintatico) ;
     void program_heading() throw (ErroSintatico) ;
     void block() throw (ErroSintatico) ;
@@ -91,14 +84,17 @@ public:
     void simple_expression() throw (ErroSintatico) ;
     void term () throw (ErroSintatico) ;
     void factor () throw (ErroSintatico) ;
+    void factor_aux()throw (ErroSintatico);
     void relational_operator() throw (ErroSintatico) ;
     void addition_operator () throw (ErroSintatico) ;
     void multiplication_operator () throw (ErroSintatico) ;
     void variable () throw (ErroSintatico) ;
+    void variable_aux ()throw (ErroSintatico);
     void component_variable() throw (ErroSintatico) ;
     void indexed_variable() throw (ErroSintatico) ;
     void field_designator() throw (ErroSintatico) ;
     void list() throw (ErroSintatico) ;
+    void list_aux()throw (ErroSintatico);
     void set() throw (ErroSintatico) ;
     void element_list() throw (ErroSintatico) ;
     void function_designator() throw (ErroSintatico) ;
@@ -107,11 +103,14 @@ public:
     //Types
     void type() throw (ErroSintatico) ;
     void simple_type() throw (ErroSintatico) ;
+    void simple_type_aux() throw (ErroSintatico);
     void enumerated_type() throw (ErroSintatico) ;
     void subrange_type() throw (ErroSintatico) ;
+    void constant_aux() throw (ErroSintatico) ;
+    void subrange_type_aux() throw (ErroSintatico) ;
     void lower_bound() throw (ErroSintatico) ;
     void upper_bound () throw (ErroSintatico) ;
-    void strutured_type() throw (ErroSintatico) ;
+    void structured_type() throw (ErroSintatico) ;
     void array_type() throw (ErroSintatico) ;
     void list_type() throw (ErroSintatico) ;
     void index_type() throw (ErroSintatico) ;
